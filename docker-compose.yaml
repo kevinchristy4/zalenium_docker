@@ -1,0 +1,29 @@
+version: "3"
+services:
+   hub:
+      image: "dosel/zalenium"
+      container_name: zalenium
+      volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - /c/Users/jthomasdominic/videos:/home/seluser/videos
+      ports:
+         - "4444:4444"
+      command: >
+         start --desiredContainers 2
+               --maxDockerSeleniumContainers 8
+               --videoRecordingEnabled true
+               --maxTestSessions 1
+   module_1:
+      image: "framework_image_1"
+      depends_on:
+          - hub
+      environment:
+          - HUB_HOST=hub
+          - MODULE=Test_1.xml
+   module_2:
+      image: "framework_image_1"
+      depends_on:
+          - hub
+      environment:
+          - HUB_HOST=hub
+          - MODULE=Test_2.xml
